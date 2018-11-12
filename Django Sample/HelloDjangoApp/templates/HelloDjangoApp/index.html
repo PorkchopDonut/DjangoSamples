@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>{{ title }}</title>
-        {% load staticfiles %}
-        <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
-    </head>
-    <body>
-        <div><a href="about">About</a></div>
-        <span class="message">{{ message }}</span>{{ content }}
-    </body>
-</html>
+{% extends "HelloDjangoApp/layout.html" %}
+{% block content %}
+<span class="message">{{ message }}</span>{{ content }}
+{% endblock %}
