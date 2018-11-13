@@ -1,6 +1,7 @@
 {% extends "HelloDjangoApp/layout.html" %}
 {% block content %}
-<span class="message">{{ message }}</span>{{ content }}
+<span class="greeting">{{ greeting }}</span>
+{{ content }}
 <hr />
-{{ messages }}
+{{ messages | safe }}
 {% endblock %}

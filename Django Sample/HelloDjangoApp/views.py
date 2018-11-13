@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from datetime import datetime
 from django.shortcuts import render
+from .models import Message
 import sqlite3
 import os
 
@@ -12,17 +13,17 @@ def index(request):
     cursor = conn.cursor()
     messages = []
 
-    for row in cursor.execute("SELECT Message from Sample"):
-        messages.append(row[0])
+    for row in cursor.execute("SELECT Number, Sender, Message, Date, Read FROM Sample"):
+        messages.append(Message(row[0], row[1], row[2], row[3], row[4]))
 
     return render(
         request,
         "HelloDjangoApp/index.html",
         {
             'title': "Hello Django!",
-            'message': "Hello Django!",
+            'greeting': "Hello Django!",
             'content': " on " + now.strftime("%A, %d %B, %Y at %X"),
-            'messages': messages
+            'messages': displayMessages(messages)
         }
     )
 
@@ -35,3 +36,11 @@ def about(request):
             'content' : "Example app page for Django."
         }
     )
+
+def displayMessages(messages):
+    output = ""
+    
+    for message in messages:
+        output += "<span class=\"message\">{}</span><br>".format(message.__str__())
+
+    return output

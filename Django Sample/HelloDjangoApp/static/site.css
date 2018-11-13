@@ -1,4 +1,4 @@
-.message {
+.greeting {
     font-weight: 600;
     color: blue;
 }
@@ -27,6 +27,11 @@
 }
 
 .body-content {
+    padding: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.message {
     padding: 5px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
