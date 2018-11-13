@@ -7,27 +7,23 @@ import sqlite3
 import os
 
 def index(request):
-    now = datetime.now()
-
-    messages = Message.objects.order_by('-date').only('number', 'sender', 'message', 'date', 'read')
-
     return render(
         request,
         "HelloDjangoApp/index.html",
         {
-            'title': "Hello Django!",
-            'greeting': "Hello Django!",
-            'content': " on " + now.strftime("%A, %d %B, %Y at %X"),
-            'messages': messages
+            'title': "All Messages",
+            'greeting': "All Messages",
+            'messages': Message.objects.order_by('-date').only('number', 'sender', 'message', 'date', 'read')
         }
     )
 
-def about(request):
+def unread(request):
     return render(
         request,
-        "HelloDjangoApp/about.html",
+        "HelloDjangoApp/index.html",
         {
-            'title' : "About HelloDjangoApp",
-            'content' : "Example app page for Django."
+            'title' : "Unread Messages",
+            'greeting' : "Unread Messages",
+            'messages' : Message.objects.filter(read=False).order_by('-date').only('number', 'sender', 'message', 'date', 'read')
         }
     )
