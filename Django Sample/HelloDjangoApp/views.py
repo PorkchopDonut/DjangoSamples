@@ -13,7 +13,7 @@ def index(request):
     cursor = conn.cursor()
     messages = []
 
-    for row in cursor.execute("SELECT Number, Sender, Message, Date, Read FROM Sample"):
+    for row in cursor.execute("SELECT Number, Sender, Message, Date, Read FROM Sample ORDER BY Date DESC"):
         messages.append(Message(row[0], row[1], row[2], row[3], row[4]))
 
     return render(
@@ -41,6 +41,6 @@ def displayMessages(messages):
     output = ""
     
     for message in messages:
-        output += "<span class=\"message\">{}</span><br>".format(message.__str__())
+        output += "<p class=\"{}-message\">{}</p>".format("unread" if message.read else "read", message.__str__())
 
     return output
