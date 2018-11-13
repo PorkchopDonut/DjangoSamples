@@ -1,0 +1,15 @@
+{% extends "HelloDjangoApp/layout.html" %}
+{% block content %}
+<span class="greeting">{{ greeting }}</span>
+<hr />
+<div id="message_stream">
+    {% for message in messages %}
+        <p class="{% if message.read %}read{% else %}unread{% endif %}-message">
+            <span class="message-header">{{ message.sender }} ({{ message.date }})</span><br />
+            {{ message.message }}<br />
+            <a class="message-footer" href="{% url 'update' %}?number={{ message.number }}&mark={% if message.read %}False{% else %}True{% endif %}&next={{ request.path }}">Mark as {% if message.read %}unread{% else %}read{% endif %}</a>
+        </p>
+    {% endfor %}
+</div>
+{% endblock %}
+

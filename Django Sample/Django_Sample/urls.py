@@ -1,9 +1,9 @@
 from django.conf.urls import include, url
 import HelloDjangoApp.views
+import HelloDjangoApp.api.views
 
 urlpatterns = [
     url(r'^$', HelloDjangoApp.views.index, name='index'),
-    url(r'^all$', HelloDjangoApp.views.index, name='all'),
-    url(r'^unread$', HelloDjangoApp.views.unread, name='unread'),
-    url(r'^update$', HelloDjangoApp.views.update, name='update')
+    url(r'^messages$', HelloDjangoApp.api.views.ListAPIView.as_view(), name='messages'),
+    url(r'^messages/update/(?P<pk>[0-9]+)$', HelloDjangoApp.api.views.UpdateAPIView.as_view(), name='update')
 ]

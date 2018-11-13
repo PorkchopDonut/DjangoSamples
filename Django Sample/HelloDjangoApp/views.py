@@ -13,7 +13,7 @@ def index(request):
         {
             'title' : "All Messages",
             'greeting' : "All Messages",
-            'page' : 'read',
+            'page' : "read",
             'messages' : Message.objects.order_by('-date').only('number', 'sender', 'message', 'date', 'read')
         }
     )
@@ -31,6 +31,11 @@ def unread(request):
     )
 
 def update(request):
+    Message.objects.filter(number=request.GET.get('number')).update(read=request.GET.get('mark'))
+
+    return redirect(request.GET.get('next', 'index'))
+
+def search(request):
     Message.objects.filter(number=request.GET.get('number')).update(read=request.GET.get('mark'))
 
     return redirect(request.GET.get('next', 'index'))

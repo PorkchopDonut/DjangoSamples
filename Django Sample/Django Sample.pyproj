@@ -31,9 +31,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="HelloDjangoApp\admin.py" />
+    <Compile Include="HelloDjangoApp\api\routers.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelloDjangoApp\api\serializers.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelloDjangoApp\api\views.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelloDjangoApp\api\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelloDjangoApp\apps.py" />
     <Compile Include="HelloDjangoApp\migrations\__init__.py" />
     <Compile Include="HelloDjangoApp\models.py" />
+    <Compile Include="HelloDjangoApp\serializers.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelloDjangoApp\tests.py" />
     <Compile Include="HelloDjangoApp\views.py" />
     <Compile Include="HelloDjangoApp\__init__.py" />
@@ -45,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="HelloDjangoApp\static\site.css" />
+    <Content Include="HelloDjangoApp\templates\HelloDjangoApp\old_layout.html" />
+    <Content Include="HelloDjangoApp\templates\HelloDjangoApp\old_index.html" />
     <Content Include="HelloDjangoApp\templates\HelloDjangoApp\index.html" />
     <Content Include="HelloDjangoApp\templates\HelloDjangoApp\layout.html" />
     <Content Include="requirements.txt" />
@@ -53,6 +70,7 @@
     <Folder Include="Django_Sample\" />
     <Folder Include="HelloDjangoApp\" />
     <Folder Include="HelloDjangoApp\migrations\" />
+    <Folder Include="HelloDjangoApp\api\" />
     <Folder Include="HelloDjangoApp\resources\" />
     <Folder Include="HelloDjangoApp\static\" />
     <Folder Include="HelloDjangoApp\templates\" />

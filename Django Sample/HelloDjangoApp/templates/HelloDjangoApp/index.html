@@ -1,12 +1,38 @@
 {% extends "HelloDjangoApp/layout.html" %}
 {% block content %}
-<span class="greeting">{{ greeting }}</span>
+<span class="greeting" id="inbox_title"></span>
 <hr />
-{% for message in messages %}
-<p class="{% if message.read %}read{% else %}unread{% endif %}-message">
-    <span class="message-header">{{ message.sender }} ({{ message.date }})</span><br />
-    {{ message.message }}<br />
-    <a class="message-footer" href="{% url 'update' %}?number={{ message.number }}&mark={% if message.read %}False{% else %}True{% endif %}&next={{ request.path }}">Mark as {% if message.read %}unread{% else %}read{% endif %}</a>
-</p>
-{% endfor %}
+<div id="message_stream">
+</div>
+{% endblock %}
+{% block end_js %}
+    <script type="text/javascript">
+        function loadMessages() {
+            $.get('messages', function (data) {
+                var output = "";
+
+                for (var i = 0; i < data.length; i++) {
+                    var message = data[i];
+
+                    output += `<p class="${(message.read ? "read" : "unread")}-message"><span class="message-header">${message.sender} (${message.date})</span>` +
+                        `<br />${message.message} <br />` +
+                        `<a class="message-footer" href="javascript:void(0);" id="${message.id}" >Mark as ${(message.read ? "unread" : "read")}</a></p>`;
+                }
+
+                $("#message_stream").html(output);
+                $(".message-footer").on("click", function () {
+                    var read = ($(this).parents('.read-message').length == 0);
+
+                    $.ajax('messages/update/' + $(this).attr('id'), {
+                        method: "patch", data: { read: read }, success: function () { loadMessages(); }
+                    });
+                });
+            });
+        }
+
+        loadMessages();
+    </script>
+    {% comment %}
+        <a class="message-footer" href="{% url 'update' %}?number={{ message.number }}&mark={% if message.read %}False{% else %}True{% endif %}&next={{ request.path }}">Mark as {% if message.read %}unread{% else %}read{% endif %}</a>
+    {% endcomment %}
 {% endblock %}
