@@ -8,13 +8,8 @@ import os
 
 def index(request):
     now = datetime.now()
-    __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-    conn = sqlite3.connect(os.path.join(__location__, 'resources/SampleDB.db'))
-    cursor = conn.cursor()
-    messages = []
 
-    for row in cursor.execute("SELECT Number, Sender, Message, Date, Read FROM Sample ORDER BY Date DESC"):
-        messages.append(Message(row[0], row[1], row[2], row[3], row[4]))
+    messages = Message.objects.order_by('-date').only('number', 'sender', 'message', 'date', 'read')
 
     return render(
         request,
@@ -23,7 +18,7 @@ def index(request):
             'title': "Hello Django!",
             'greeting': "Hello Django!",
             'content': " on " + now.strftime("%A, %d %B, %Y at %X"),
-            'messages': displayMessages(messages)
+            'messages': messages
         }
     )
 
@@ -36,11 +31,3 @@ def about(request):
             'content' : "Example app page for Django."
         }
     )
-
-def displayMessages(messages):
-    output = ""
-    
-    for message in messages:
-        output += "<p class=\"{}-message\">{}</p>".format("unread" if message.read else "read", message.__str__())
-
-    return output

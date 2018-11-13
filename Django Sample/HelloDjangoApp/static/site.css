@@ -46,3 +46,9 @@
     border: 2px solid red;
     box-shadow: 5px 5px #888888;
 }
+
+.message-header {
+    font-size: 1em;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: steelblue;
+}
