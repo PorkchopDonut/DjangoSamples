@@ -1,38 +1,80 @@
 {% extends "HelloDjangoApp/layout.html" %}
 {% block content %}
 <span class="greeting" id="inbox_title"></span>
+Show read messages: <input type="checkbox" checked="checked" id="read-checkbox" /><br />
+Search messages: <input type="text" id="search-bar" />
 <hr />
 <div id="message_stream">
 </div>
 {% endblock %}
 {% block end_js %}
     <script type="text/javascript">
-        function loadMessages() {
-            $.get('messages', function (data) {
-                var output = "";
+        var request = null;
+        var read = true;
 
-                for (var i = 0; i < data.length; i++) {
-                    var message = data[i];
+        function loadMessages(search) {
+            if (request != null) {
+                request.abort();
+            }
 
-                    output += `<p class="${(message.read ? "read" : "unread")}-message"><span class="message-header">${message.sender} (${message.date})</span>` +
-                        `<br />${message.message} <br />` +
-                        `<a class="message-footer" href="javascript:void(0);" id="${message.id}" >Mark as ${(message.read ? "unread" : "read")}</a></p>`;
-                }
+            var searchData = {};
 
-                $("#message_stream").html(output);
-                $(".message-footer").on("click", function () {
-                    var read = ($(this).parents('.read-message').length == 0);
+            if (read == false) {
+                searchData['read'] = "False";
+            }
 
-                    $.ajax('messages/update/' + $(this).attr('id'), {
-                        method: "patch", data: { read: read }, success: function () { loadMessages(); }
+            if (search != null && search != "") {
+                searchData['search'] = search;
+            }
+
+            request = $.ajax('messages', {
+                method: "get", data: searchData, success: function (data) {
+                    var output = "";
+
+                    if (data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            var message = data[i];
+
+                            output += `<p class="${(message.read ? "read" : "unread")}-message"><span class="message-header">${message.sender} (${message.date})</span>` +
+                                `<br />${message.message} <br />` +
+                                `<a class="message-footer" href="javascript:void(0);" id="${message.id}" >Mark as ${(message.read ? "unread" : "read")}</a></p>`;
+                        }
+                    }
+                    else {
+                        output += "No messages to display...";
+                    }
+
+                    $("#message_stream").html(output);
+                    $(".message-footer").on("click", function () {
+                        var read = ($(this).parents('.read-message').length == 0);
+
+                        $.ajax('messages/update/' + $(this).attr('id'), {
+                            method: "patch", data: { read: read }, success: function () { loadMessages($("#search-bar").val()); }
+                        });
                     });
-                });
+
+                    request = null;
+                }
             });
         }
 
-        loadMessages();
+        loadMessages($("#search-bar").val());
+
+        $("#read-checkbox").click(function() {
+            var checked = $(this).is(':checked');
+
+            if (!checked) {
+                read = false;
+            }
+            else {
+                read = true;
+            }
+
+            loadMessages($("#search-bar").val());
+        });
+
+        $("#search-bar").keyup(function () {
+            loadMessages($(this).val());
+        });
     </script>
-    {% comment %}
-        <a class="message-footer" href="{% url 'update' %}?number={{ message.number }}&mark={% if message.read %}False{% else %}True{% endif %}&next={{ request.path }}">Mark as {% if message.read %}unread{% else %}read{% endif %}</a>
-    {% endcomment %}
 {% endblock %}
