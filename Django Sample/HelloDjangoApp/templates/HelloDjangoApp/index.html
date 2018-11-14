@@ -73,7 +73,7 @@ Search messages: <input type="text" id="search-bar" />
             loadMessages($("#search-bar").val());
         });
 
-        $("#search-bar").keyup(function () {
+        $("#search-bar").on("input", function () {
             loadMessages($(this).val());
         });
     </script>

@@ -5,5 +5,5 @@ class Message(models.Model):
     number = models.IntegerField()
     sender = models.TextField()
     message = models.TextField()
-    date = models.DateField(auto_now_add=True)
+    date = models.TextField(default=datetime.now().strftime('%b %d, %Y at %I:%M %p'))
     read = models.BooleanField()
